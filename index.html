@@ -77,18 +77,28 @@ button:hover {
   font-weight: bold;
   text-align: center;
 }
-  footer {
-    background: #2c3e50;   
-    color: white;
-    height: 60px;          
-    
-    display: flex;
-    justify-content: center;   
-    align-items: center;       
-    
-    text-align: center;
-    font-size: 14px;
-  }
+
+/* Book List */
+.book-list {
+  margin-top: 15px;
+}
+
+.book-item {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Footer */
+footer {
+  background: #2c3e50;
+  color: white;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 14px;
+}
 </style>
 
 </head>
@@ -99,6 +109,7 @@ button:hover {
 <h1>📚 Smart Library Navigator</h1>
 </header>
 
+<!-- SEARCH -->
 <section>
 <h2>🔍 Search Book</h2>
 
@@ -117,6 +128,30 @@ button:hover {
 </div>
 </section>
 
+<!-- ADD BOOK -->
+<section>
+<h2>➕ Add New Book</h2>
+
+<div class="search-box">
+  <input type="text" id="bookName" placeholder="Book Name">
+  <input type="text" id="bookAuthor" placeholder="Author">
+  <input type="text" id="bookCategory" placeholder="Category">
+  <input type="text" id="bookShelf" placeholder="Shelf (e.g. A1)">
+  
+  <br>
+  <button onclick="addBook()">Add Book</button>
+  
+  <div class="result" id="addResult"></div>
+</div>
+</section>
+
+<!-- DISPLAY BOOKS -->
+<section>
+<h2>📖 All Books</h2>
+<div class="book-list" id="bookList"></div>
+</section>
+
+<!-- MAP -->
 <section>
 <h2>🗺️ Library Map</h2>
 
@@ -131,11 +166,10 @@ button:hover {
 </div>
 
 </section>
-  <footer>
-    <p>
-      Implement by: Abhishek Bhadauriya and team |AI/ML SEC. D
-    </p>
-  </footer>
+
+<footer>
+<p>Implement by: Abhishek Bhadauriya and team | AI/ML SEC. D</p>
+</footer>
 
 <script>
 
@@ -147,6 +181,20 @@ const library = [
   { name: "DBMS", author: "Korth", category: "CS", shelf: "D4" },
   { name: "Machine Learning", author: "Tom Mitchell", category: "AI", shelf: "E5" }
 ];
+
+// 🔄 Display all books
+function displayBooks() {
+  const list = document.getElementById("bookList");
+  list.innerHTML = "";
+
+  library.forEach(book => {
+    list.innerHTML += `
+      <div class="book-item">
+        📘 ${book.name} | 👤 ${book.author} | 📂 ${book.category} | 📍 ${book.shelf}
+      </div>
+    `;
+  });
+}
 
 // 🔄 Clear highlights
 function clearMap() {
@@ -163,14 +211,12 @@ function searchBook() {
 
   clearMap();
 
-  // 🚫 Empty input check
   if (input === "") {
     result.style.color = "orange";
     result.innerText = "⚠️ Please enter something";
     return;
   }
 
-  // 🔎 Search logic
   let found = library.find(book => {
     return book[type].toLowerCase().includes(input);
   });
@@ -178,14 +224,43 @@ function searchBook() {
   if (found) {
     result.style.color = "green";
     result.innerText = `✅ Found: ${found.name} → Shelf ${found.shelf}`;
-
-    document.getElementById(found.shelf).classList.add("highlight");
-
+    document.getElementById(found.shelf)?.classList.add("highlight");
   } else {
     result.style.color = "red";
     result.innerText = "❌ No result found";
   }
 }
+
+// ➕ Add Book Function
+function addBook() {
+  let name = document.getElementById("bookName").value.trim();
+  let author = document.getElementById("bookAuthor").value.trim();
+  let category = document.getElementById("bookCategory").value.trim();
+  let shelf = document.getElementById("bookShelf").value.trim().toUpperCase();
+  let result = document.getElementById("addResult");
+
+  if (!name || !author || !category || !shelf) {
+    result.style.color = "orange";
+    result.innerText = "⚠️ Fill all fields";
+    return;
+  }
+
+  library.push({ name, author, category, shelf });
+
+  result.style.color = "green";
+  result.innerText = "✅ Book added successfully";
+
+  // Clear inputs
+  document.getElementById("bookName").value = "";
+  document.getElementById("bookAuthor").value = "";
+  document.getElementById("bookCategory").value = "";
+  document.getElementById("bookShelf").value = "";
+
+  displayBooks();
+}
+
+// 🚀 Load books on start
+displayBooks();
 
 </script>
 
