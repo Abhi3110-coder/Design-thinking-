@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Smart Library Navigator</title>
+
+<style>
+
+body {
+
+font-family: Arial;
+
+margin: 0;
+
+background: #f4f6f9;
+
+}
+
+header {
+
+background: #2c3e50;
+
+color: white;
+
+text-align: center;
+
+padding: 20px;
+
+}
+
+section {
+
+background: white;
+
+margin: 15px;
+
+padding: 20px;
+
+border-radius: 10px;
+
+}
+
+/* Search */
+
+.search-box {
+
+text-align: center;
+
+}
+
+input, select {
+
+padding: 10px;
+
+margin: 5px;
+
+width: 200px;
+
+}
+
+button {
+
+padding: 10px;
+
+background: #3498db;
+
+color: white;
+
+border: none;
+
+cursor: pointer;
+
+}
+/* Map */
+
+.map {
+
+display: grid;
+
+grid-template-columns: repeat(5, 1fr);
+
+gap: 10px;
+
+margin-top: 20px;
+
+}
+
+.shelf {
+
+padding: 20px;
+
+text-align: center;
+
+background: #bdc3c7;
+
+border-radius: 8px;
+
+}
+
+.highlight {
+
+background: #2ecc71 !important;
+
+color: white;
+
+font-weight: bold;
+
+}
+
+.result {
+
+margin-top: 10px;
+
+font-weight: bold;
+
+text-align: center;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1> Smart Library Navigator</h1>
+
+</header>
+
+<section>
+
+<h2> Search Book</h2>
+
+<div class="search-box">
+
+<input type="text" id="searchInput" placeholder="Enter book / author / category">
+
+<select id="searchType">
+
+<option value="name">Book Name</option>
+
+<option value="author">Author</option>
+
+<option value="category">Category</option>
+
+</select>
+
+<button onclick="searchBook()">Search</button>
+
+<div class="result" id="result"></div>
+
+</div>
+
+</section>
+
+<section>
+
+<h2> Library Map</h2>
+
+<div class="map" id="map">
+
+<div class="shelf" id="A1">A1</div>
+
+<div class="shelf" id="A2">A2</div>
+
+<div class="shelf" id="B1">B1</div>
+
+<div class="shelf" id="B2">B2</div>
+
+<div class="shelf" id="C3">C3</div>
+
+<div class="shelf" id="D4">D4</div>
+
+<div class="shelf" id="E5">E5</div>
+
+</div>
+</section>
+
+<script>
+
+// Book database
+
+const library = [
+
+{name: "Operating System"
+
+, author: "Galvin"
+
+, category: "CS"
+
+, shelf: "B2"},
+
+{name: "Data Structures"
+
+, author: "Sahni"
+
+, category: "CS"
+
+, shelf: "A1"},
+
+{name: "Computer Networks"
+
+, author: "Tanenbaum"
+
+, category: "CS"
+
+, shelf: "C3"},
+
+{name: "DBMS"
+
+, author: "Korth"
+
+, category: "CS"
+
+, shelf: "D4"},
+
+{name: "Machine Learning"
+
+, author: "Tom Mitchell"
+
+, category: "AI"
+
+, shelf: "E5"}
+
+];
+
+// Clear highlights
+
+function clearMap() {
+
+document.querySelectorAll("
+
+.shelf").forEach(s => {
+
+s.classList.remove("highlight");
+
+});
+
+}
+
+// Search function
+
+function searchBook() {
+
+let input = document.getElementById("searchInput").value.toLowerCase();
+
+let type = document.getElementById("searchType").value;
+
+let result = document.getElementById("result");
+
+clearMap();
+
+let found = library.find(book => {
+
+return book[type].toLowerCase().includes(input);
+
+});
+
+if (found) {
+
+result.style.color = "green";
+
+result.innerText =
+
+` Found: ${found.name} → Shelf ${found.shelf}`
+
+;
+
+document.getElementById(found.shelf).classList.add("highlight");
+
+} else {
+
+result.style.color = "red";
+
+result.innerText = " No result found";
+
+}
+
+}
+
+</script>
+
+</body>
+
+</html>
